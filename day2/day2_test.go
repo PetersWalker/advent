@@ -1,6 +1,9 @@
 package main
 
 import (
+	"bufio"
+	"log"
+	"os"
 	"testing"
 
 	"gotest.tools/assert"
@@ -12,7 +15,7 @@ Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
 Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green`
 
-func TestDay2(t *testing.T) {
+func TestParseGameNumber(t *testing.T) {
 	game1 := "Game 49: 11 red, 10 green, 12 blue; 4 green, 6 red, 6 blue; 9 red, 3 blue, 7 green; 6 red, 10 green, 14 blue; 8 blue, 10 red, 5 green; 6 blue, 17 green, 6 red"
 	n1 := parseGameNumber(game1)
 
@@ -22,4 +25,19 @@ func TestDay2(t *testing.T) {
 	n2 := parseGameNumber(game2)
 
 	assert.Equal(t, n2, 9)
+}
+
+func TestProcessLines(t *testing.T) {
+	file, err := os.Open("./input.txt")
+	if err != nil {
+		log.Panic(err)
+	}
+
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	count := processLines(scanner)
+
+	assert.Equal(t, count, 2283)
 }

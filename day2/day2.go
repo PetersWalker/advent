@@ -15,12 +15,12 @@ import (
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	count := processLines(scanner)
-	log.Println("total: ", count)
+	log.Println("total count for possible games: ", count)
+
 }
 
 func processLines(s *bufio.Scanner) int {
 	possibleGames := 0
-
 	red := 12
 	green := 13
 	blue := 14
