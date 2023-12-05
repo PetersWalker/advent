@@ -13,10 +13,55 @@ import (
 // and 14 blue cubes?
 
 func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-	count := processLines(scanner)
+	file, err := os.Open("./input.txt")
+	if err != nil {
+		log.Panic(err)
+	}
+
+	defer file.Close()
+
+	scanner1 := bufio.NewScanner(file)
+
+	scanner2 := bufio.NewScanner(os.Stdin)
+	count := processLines(scanner1)
 	log.Println("total count for possible games: ", count)
 
+	minPowerCube := minPowerCube(scanner2)
+	log.Println("minPowerCube: ", minPowerCube)
+
+}
+
+func minPowerCube(s *bufio.Scanner) int {
+	sum := 0
+
+	for s.Scan() {
+		log.Println("powerCube :")
+		line := s.Text()
+
+		minRed := 0
+		minGreen := 0
+		minBlue := 0
+
+		colorCounts := parseColorValues(line)
+
+		for _, colorValue := range colorCounts {
+			if colorValue["red"] > minRed {
+				minRed = colorValue["red"]
+			}
+
+			if colorValue["green"] > minGreen {
+				minGreen = colorValue["green"]
+			}
+
+			if colorValue["blue"] > minBlue {
+				minBlue = colorValue["blue"]
+			}
+		}
+		powerCube := minRed * minGreen * minBlue
+
+		sum += powerCube
+	}
+	return sum
 }
 
 func processLines(s *bufio.Scanner) int {
@@ -47,7 +92,6 @@ func processLines(s *bufio.Scanner) int {
 		}
 
 		if possible {
-			log.Println(gameNumber)
 			possibleGames += gameNumber
 		}
 
@@ -55,12 +99,6 @@ func processLines(s *bufio.Scanner) int {
 
 	return possibleGames
 }
-
-// type ColorValue struct {
-// 	red   int
-// 	green int
-// 	blue  int
-// }
 
 // "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green"
 func parseColorValues(line string) []map[string]int {
