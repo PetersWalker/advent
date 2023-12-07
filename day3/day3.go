@@ -8,16 +8,20 @@ import (
 )
 
 func main() {
-	// file, err := os.Open("./input.txt")
-	// if err != nil {
-	// 	log.Panic(err)
-	// }
+	partNumberSum, gearRatioSum := processFile("./input.txt")
+	log.Println("gearRatioSum: ", gearRatioSum)
+	log.Println("partNumberSum: ", partNumberSum)
+}
 
-	// defer file.Close()
+func processFile(path string) (int, int) {
+	file, err := os.Open(path)
+	if err != nil {
+		log.Panic(err)
+	}
 
-	data := os.Stdin
+	defer file.Close()
 
-	scanner := bufio.NewScanner(data)
+	scanner := bufio.NewScanner(file)
 	lines := []string{}
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
@@ -26,7 +30,7 @@ func main() {
 	var prev string
 	var next string
 	nums := []string{}
-	sum := 0
+	partNumberSum := 0
 
 	gearRatioSum := 0
 	for i, line := range lines {
@@ -52,11 +56,12 @@ func main() {
 		for _, coordinatePair := range coordinatePairs {
 			numbers := coordinatesToNumbers(coordinatePair, lines)
 
-			if len(numbers) <= 1 {
+			if len(numbers) != 2 {
+				log.Println("gearNumbers", numbers)
 				continue
 			}
 
-			log.Println("gearNumbers", numbers)
+			// log.Println("gearNumbers", numbers)
 
 			first, err := strconv.Atoi(numbers[0])
 			if err != nil {
@@ -73,7 +78,6 @@ func main() {
 		}
 	}
 
-	log.Println("gearRatioSum: ", gearRatioSum)
 	for _, num := range nums {
 		number, err := strconv.Atoi(num)
 
@@ -81,10 +85,11 @@ func main() {
 			log.Fatal(err)
 		}
 
-		sum += number
+		partNumberSum += number
 	}
 
-	log.Println("sum is ", sum)
+	log.Println("sum is ", partNumberSum)
+	return partNumberSum, gearRatioSum
 }
 
 type Coordinate struct {

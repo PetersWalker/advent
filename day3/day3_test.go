@@ -99,3 +99,11 @@ func TestCheckLineForGearNumbers(t *testing.T) {
 
 	assert.DeepEqual(t, desired, result)
 }
+
+// integration tests
+func TestProcessFile(t *testing.T) {
+	partSum, gearSum := processFile("./test1.txt")
+
+	assert.Equal(t, partSum, 4361)
+	assert.Equal(t, gearSum, 467835)
+}
