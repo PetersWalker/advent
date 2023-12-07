@@ -106,4 +106,25 @@ func TestProcessFile(t *testing.T) {
 
 	assert.Equal(t, partSum, 4361)
 	assert.Equal(t, gearSum, 467835)
+
+	gearRatios := []int{
+		(648 * 531),
+		(671 * 810),
+		(137 * 155),
+		(275 * 172),
+		(150 * 185),
+		(457 * 747),
+	}
+
+	partSum, gearSum = processFile("./test2.txt")
+
+	assert.Equal(t, gearSum, sumArray(gearRatios))
+}
+
+func sumArray(arr []int) int {
+	sum := 0
+	for _, v := range arr {
+		sum += v
+	}
+	return sum
 }

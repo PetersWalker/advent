@@ -14,6 +14,7 @@ func main() {
 }
 
 func processFile(path string) (int, int) {
+	log.Println("************************")
 	file, err := os.Open(path)
 	if err != nil {
 		log.Panic(err)
@@ -57,11 +58,10 @@ func processFile(path string) (int, int) {
 			numbers := coordinatesToNumbers(coordinatePair, lines)
 
 			if len(numbers) != 2 {
-				log.Println("gearNumbers", numbers)
 				continue
 			}
 
-			// log.Println("gearNumbers", numbers)
+			log.Println("gearNumbers", numbers)
 
 			first, err := strconv.Atoi(numbers[0])
 			if err != nil {
@@ -89,6 +89,7 @@ func processFile(path string) (int, int) {
 	}
 
 	log.Println("sum is ", partNumberSum)
+
 	return partNumberSum, gearRatioSum
 }
 
