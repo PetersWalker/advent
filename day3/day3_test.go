@@ -110,13 +110,13 @@ func TestProcessFile(t *testing.T) {
 	gearRatios := []int{
 		(648 * 531),
 		(671 * 810),
-		(137 * 155),
-		(275 * 172),
-		(150 * 185),
+		(137 * 155), // failing here
+		(172 * 275),
+		(150 * 815),
 		(457 * 747),
 	}
 
-	partSum, gearSum = processFile("./test2.txt")
+	_, gearSum = processFile("./test2.txt")
 
 	assert.Equal(t, gearSum, sumArray(gearRatios))
 }

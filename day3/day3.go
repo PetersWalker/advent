@@ -61,8 +61,6 @@ func processFile(path string) (int, int) {
 				continue
 			}
 
-			log.Println("gearNumbers", numbers)
-
 			first, err := strconv.Atoi(numbers[0])
 			if err != nil {
 				log.Panic(err)
@@ -87,8 +85,6 @@ func processFile(path string) (int, int) {
 
 		partNumberSum += number
 	}
-
-	log.Println("sum is ", partNumberSum)
 
 	return partNumberSum, gearRatioSum
 }
@@ -132,6 +128,8 @@ func checkLineForGearNumbers(prev string, current string, next string, rowIndex 
 		if string(v) != "*" {
 			continue
 		}
+
+		log.Println("gear here: ", i)
 
 		//top
 		if prevExists && isANumber[string(prev[i])] {
@@ -266,14 +264,24 @@ func checkLineForParts(prev string, current string, next string, lineIndex int) 
 
 func coordinatesToNumbers(coordinates []Coordinate, lines []string) []string {
 	nums := []string{}
-	numSet := map[int]string{}
+	numSet := map[Coordinate]string{}
+	// log.Println("============================")
+	// log.Println("coordiantes: ", coordinates)
+
 	for _, coordinate := range coordinates {
+		// [{0 81} {2 81}]
+		// [{0 81} {2 81}, {2 82}]
+
 		initialLeft := coordinate.Column
 		initialRight := coordinate.Column
 		line := lines[coordinate.Row]
 		left, right := searchLeftAndRight(line, initialLeft, initialRight)
-		numSet[left] = line[left : right+1]
+		// log.Println("left and right: ", left, right)
+		// log.Println("value from slice", string(line[left:right+1]))
+
+		numSet[Coordinate{Column: left, Row: coordinate.Row}] = line[left : right+1]
 	}
+	// log.Println(numSet)
 	for _, num := range numSet {
 		nums = append(nums, num)
 	}
