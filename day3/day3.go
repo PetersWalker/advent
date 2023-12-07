@@ -41,7 +41,7 @@ func main() {
 		}
 
 		coordinates := checkLineForParts(prev, line, next, i)
-		partNumbers := coordinatesToNumbers(coordinates, line)
+		partNumbers := coordinatesToNumbers(coordinates, lines)
 		nums = append(nums, partNumbers...)
 
 		checkLineForGearNumbers(prev, line, next, i)
@@ -236,12 +236,13 @@ func checkLineForParts(prev string, current string, next string, lineIndex int) 
 	return coordinates
 }
 
-func coordinatesToNumbers(coordinates []Coordinate, line string) []string {
+func coordinatesToNumbers(coordinates []Coordinate, lines []string) []string {
 	nums := []string{}
 	numSet := map[int]string{}
 	for _, coordinate := range coordinates {
 		initialLeft := coordinate.Column
 		initialRight := coordinate.Column
+		line := lines[coordinate.Row]
 		left, right := searchLeftAndRight(line, initialLeft, initialRight)
 		numSet[left] = line[left : right+1]
 	}

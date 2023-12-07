@@ -36,6 +36,13 @@ func TestCheckLine(t *testing.T) {
 }
 
 func TestCoordinatesToNumbers(t *testing.T) {
+
+	lines1 := []string{
+		"...*......",
+		"..35..633.",
+		"......#...",
+	}
+
 	coordinates1 := []Coordinate{
 		{Row: 1, Column: 2},
 		{Row: 1, Column: 3},
@@ -48,7 +55,7 @@ func TestCoordinatesToNumbers(t *testing.T) {
 		"633",
 	}
 
-	result1 := coordinatesToNumbers(coordinates1, "..35..633.")
+	result1 := coordinatesToNumbers(coordinates1, lines1)
 
 	assert.DeepEqual(t, desired1, result1)
 
@@ -62,8 +69,13 @@ func TestCoordinatesToNumbers(t *testing.T) {
 		"35",
 		"633",
 	}
+	lines2 := []string{
+		".*.....",
+		"35..633",
+		"....#..",
+	}
 
-	result2 := coordinatesToNumbers(coordinates2, "35..633")
+	result2 := coordinatesToNumbers(coordinates2, lines2)
 
 	assert.DeepEqual(t, desired2, result2)
 }
