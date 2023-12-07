@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"testing"
 
 	"gotest.tools/assert"
@@ -23,7 +24,7 @@ func TestCheckLine(t *testing.T) {
 	current := "..35..633."
 	next := "......#..."
 
-	result := checkLine(prev, current, next, 1)
+	result := checkLineForParts(prev, current, next, 1)
 	desired := []Coordinate{
 		{Row: 1, Column: 2},
 		{Row: 1, Column: 3},
@@ -65,4 +66,25 @@ func TestCoordinatesToNumbers(t *testing.T) {
 	result2 := coordinatesToNumbers(coordinates2, "35..633")
 
 	assert.DeepEqual(t, desired2, result2)
+}
+
+func TestCheckLineForGearNumbers(t *testing.T) {
+
+	// 467..114..
+	// ...*......
+	// ..35..633.
+	prev := "467..114.."
+	current := "...*......"
+	next := "..35..633."
+	result := checkLineForGearNumbers(prev, current, next, 1)
+
+	log.Println(result)
+
+	desired := [][]Coordinate{
+		{
+			{Row: 0, Column: 2}, {Row: 2, Column: 3}, {Row: 2, Column: 2},
+		},
+	}
+
+	assert.DeepEqual(t, desired, result)
 }

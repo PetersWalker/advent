@@ -40,9 +40,11 @@ func main() {
 			next = ""
 		}
 
-		coordinates := checkLine(prev, line, next, i)
+		coordinates := checkLineForParts(prev, line, next, i)
 		partNumbers := coordinatesToNumbers(coordinates, line)
 		nums = append(nums, partNumbers...)
+
+		// coordinatePairs := checkLineForGearNumbers(prev, line, next, i)
 	}
 
 	for _, num := range nums {
@@ -63,7 +65,93 @@ type Coordinate struct {
 	Column int
 }
 
-func checkLine(prev string, current string, next string, lineIndex int) []Coordinate {
+func checkLineForGearNumbers(prev string, current string, next string, rowIndex int) [][]Coordinate {
+	isANumber := map[string]bool{
+		"1": true,
+		"2": true,
+		"3": true,
+		"4": true,
+		"5": true,
+		"6": true,
+		"7": true,
+		"8": true,
+		"9": true,
+		"0": true,
+	}
+
+	coordinates := []Coordinate{}
+	coordinatePairs := [][]Coordinate{}
+	for i, v := range current {
+		appendCoordinate := func(rowIndex, columnIndex int) {
+			coordinates = append(coordinates, Coordinate{
+				Row:    rowIndex,
+				Column: columnIndex,
+			})
+		}
+
+		prevExists := (prev != "")
+		nextExists := (next != "")
+
+		notAtStart := (i != 0)
+		notAtEnd := (i < len(current)-1)
+
+		//if its not a gear, we don't care
+		if string(v) != "*" {
+			log.Println("its NOT a  a gear")
+			continue
+		}
+
+		log.Println("its def a gear")
+
+		//top
+		if prevExists && isANumber[string(prev[i])] {
+			appendCoordinate(rowIndex-1, i)
+		}
+
+		//top left
+		if prevExists && notAtStart && isANumber[string(prev[i-1])] {
+			appendCoordinate(rowIndex-1, i-1)
+		}
+
+		//top right
+		if prevExists && notAtEnd && isANumber[string(prev[i+1])] {
+			appendCoordinate(rowIndex-1, i+1)
+		}
+
+		//left
+		if notAtStart && isANumber[string(current[i-1])] {
+			appendCoordinate(rowIndex, i-1)
+		}
+		//right
+		if notAtEnd && isANumber[string(current[i+1])] {
+			appendCoordinate(rowIndex, i+1)
+		}
+
+		// bottom
+		if nextExists && isANumber[string(next[i])] {
+			appendCoordinate(rowIndex+1, i)
+		}
+
+		// bottom left
+		if nextExists && notAtStart && isANumber[string(next[i-1])] {
+			appendCoordinate(rowIndex+1, i-1)
+		}
+
+		// bottom right
+		if nextExists && notAtEnd && isANumber[string(next[i+1])] {
+			appendCoordinate(rowIndex+1, i+1)
+		}
+
+		// flush coordinates
+
+		log.Println("coordinates", coordinates)
+		coordinatePairs = append(coordinatePairs, coordinates)
+		coordinates = []Coordinate{}
+	}
+	return coordinatePairs
+}
+
+func checkLineForParts(prev string, current string, next string, lineIndex int) []Coordinate {
 	isNotAPart := map[string]bool{
 		"1": true,
 		"2": true,
