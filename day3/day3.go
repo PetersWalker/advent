@@ -8,14 +8,16 @@ import (
 )
 
 func main() {
-	file, err := os.Open("./input.txt")
-	if err != nil {
-		log.Panic(err)
-	}
+	// file, err := os.Open("./input.txt")
+	// if err != nil {
+	// 	log.Panic(err)
+	// }
 
-	defer file.Close()
+	// defer file.Close()
 
-	scanner := bufio.NewScanner(file)
+	data := os.Stdin
+
+	scanner := bufio.NewScanner(data)
 	lines := []string{}
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
@@ -26,6 +28,7 @@ func main() {
 	nums := []string{}
 	sum := 0
 
+	gearRatioSum := 0
 	for i, line := range lines {
 
 		// prev validation
@@ -44,9 +47,33 @@ func main() {
 		partNumbers := coordinatesToNumbers(coordinates, lines)
 		nums = append(nums, partNumbers...)
 
-		checkLineForGearNumbers(prev, line, next, i)
+		coordinatePairs := checkLineForGearNumbers(prev, line, next, i)
+
+		for _, coordinatePair := range coordinatePairs {
+			numbers := coordinatesToNumbers(coordinatePair, lines)
+
+			if len(numbers) <= 1 {
+				continue
+			}
+
+			log.Println("gearNumbers", numbers)
+
+			first, err := strconv.Atoi(numbers[0])
+			if err != nil {
+				log.Panic(err)
+			}
+
+			second, err := strconv.Atoi(numbers[1])
+			if err != nil {
+				log.Panic(err)
+			}
+
+			gearRatio := first * second
+			gearRatioSum += gearRatio
+		}
 	}
 
+	log.Println("gearRatioSum: ", gearRatioSum)
 	for _, num := range nums {
 		number, err := strconv.Atoi(num)
 
@@ -97,11 +124,8 @@ func checkLineForGearNumbers(prev string, current string, next string, rowIndex 
 
 		//if its not a gear, we don't care
 		if string(v) != "*" {
-			log.Println("its NOT a  a gear")
 			continue
 		}
-
-		log.Println("its def a gear")
 
 		//top
 		if prevExists && isANumber[string(prev[i])] {
@@ -143,8 +167,6 @@ func checkLineForGearNumbers(prev string, current string, next string, rowIndex 
 		}
 
 		// flush coordinates
-
-		log.Println("coordinates", coordinates)
 		coordinatePairs = append(coordinatePairs, coordinates)
 	}
 	return coordinatePairs
