@@ -44,7 +44,7 @@ func main() {
 		partNumbers := coordinatesToNumbers(coordinates, line)
 		nums = append(nums, partNumbers...)
 
-		// coordinatePairs := checkLineForGearNumbers(prev, line, next, i)
+		checkLineForGearNumbers(prev, line, next, i)
 	}
 
 	for _, num := range nums {
@@ -79,9 +79,9 @@ func checkLineForGearNumbers(prev string, current string, next string, rowIndex 
 		"0": true,
 	}
 
-	coordinates := []Coordinate{}
 	coordinatePairs := [][]Coordinate{}
 	for i, v := range current {
+		coordinates := []Coordinate{}
 		appendCoordinate := func(rowIndex, columnIndex int) {
 			coordinates = append(coordinates, Coordinate{
 				Row:    rowIndex,
@@ -146,7 +146,6 @@ func checkLineForGearNumbers(prev string, current string, next string, rowIndex 
 
 		log.Println("coordinates", coordinates)
 		coordinatePairs = append(coordinatePairs, coordinates)
-		coordinates = []Coordinate{}
 	}
 	return coordinatePairs
 }

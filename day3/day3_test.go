@@ -71,19 +71,18 @@ func TestCoordinatesToNumbers(t *testing.T) {
 func TestCheckLineForGearNumbers(t *testing.T) {
 
 	// 467..114..
-	// ...*......
+	// ...*.*....
 	// ..35..633.
 	prev := "467..114.."
-	current := "...*......"
+	current := "...*.*...."
 	next := "..35..633."
 	result := checkLineForGearNumbers(prev, current, next, 1)
 
 	log.Println(result)
 
 	desired := [][]Coordinate{
-		{
-			{Row: 0, Column: 2}, {Row: 2, Column: 3}, {Row: 2, Column: 2},
-		},
+		{{Row: 0, Column: 2}, {Row: 2, Column: 3}, {Row: 2, Column: 2}},
+		{{Row: 0, Column: 5}, {Row: 0, Column: 6}, {Row: 2, Column: 6}},
 	}
 
 	assert.DeepEqual(t, desired, result)
